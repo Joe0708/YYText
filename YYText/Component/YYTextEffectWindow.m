@@ -49,7 +49,13 @@
 
 // stop self from becoming the KeyWindow
 - (void)becomeKeyWindow {
-    [[YYTextSharedApplication().delegate window] makeKeyWindow];
+
+    if ([YYTextSharedApplication().delegate respondsToSelector:@selector(window)]) {
+        [[YYTextSharedApplication().delegate window] makeKeyWindow];
+    } else {
+        // Swift 混编奔溃，所以当发生需要成为主窗口时，发送通知，让App处理
+        [NSNotificationCenter.defaultCenter postNotificationName: @"YYTextEffectWindowBecomeKeyWindowNotification" object: nil];
+    }
 }
 
 - (UIViewController *)rootViewController {
