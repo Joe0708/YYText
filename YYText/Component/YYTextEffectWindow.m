@@ -36,7 +36,14 @@
             one.frame = (CGRect){.size = YYTextScreenSize()};
             one.userInteractionEnabled = NO;
             one.windowLevel = UIWindowLevelStatusBar + 1;
-            one.hidden = NO;
+
+            //iOS13 无法响应状态栏点击时间，，即使关闭了用户交互 但是它竟能够阻挡状态栏的事件，但却对常规Window的事件无任何影响...
+             if (@available(iOS 13.0, *)) {
+                 //费解的结果...
+                 one.hidden = YES;
+             }else{
+                 one.hidden = NO;
+             }
             
             // for iOS 9:
             one.opaque = NO;
